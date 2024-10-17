@@ -19,11 +19,13 @@ class ParticleType{
 
     //metodi getter
     const char* GetfName() const;
-    const double GetfMass() const;
-    const int GetfCharge() const;
+    double GetfMass() const;
+    int GetfCharge() const;
 
     //metodo print
-    void Print() const;
+    virtual void Print() const;
+    //virtual ~ParticleType();
+
 };
 
 

@@ -14,10 +14,10 @@ class ResonanceType : public ParticleType {
     const double fWidth_;
 
     public:
-    ResonanceType(const char* fName, double fMass, int fCharge, double fWidth);
-    const double GetfWidth() const;
-    void Print() const;
-
+    ResonanceType(const char* fName, double fMass, int fCharge, double fWidth) 
+    : ParticleType(fName, fMass, fCharge), fWidth_(fWidth) {}
+    double GetfWidth() const;
+    virtual void Print() const override;
 };
 
 #endif

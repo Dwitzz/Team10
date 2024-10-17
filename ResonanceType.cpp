@@ -1,7 +1,10 @@
 #include "ResonanceType.hpp"
+#include <iostream>
 
-const double ResonanceType::GetfWidth() const {return fWidth_;}
+double ResonanceType::GetfWidth() const {return fWidth_;}
+
 void ResonanceType::Print() const {
     ParticleType::Print();
     std::cout << "Particle Width: " << GetfWidth() << '\n';    
 }
+
