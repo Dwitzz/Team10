@@ -1,5 +1,4 @@
 #include <iostream>
-using namespace std;
 
 #ifndef PARTICLETYPE_H
 #define PARTICLETYPE_H
@@ -15,7 +14,8 @@ class ParticleType{
     public:
 
     //costruttore parametrico
-    ParticleType(char* fName, double fMass, int fCharge);
+    ParticleType(const char* fName, double fMass, int fCharge) :
+        fName_(fName), fMass_(fMass), fCharge_(fCharge) {};
 
     //metodi getter
     const char* GetfName() const;

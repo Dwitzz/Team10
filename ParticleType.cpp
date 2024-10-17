@@ -1,8 +1,6 @@
 #include "ParticleType.hpp"
 #include <iostream>
 
-ParticleType::ParticleType(char* fName, double fMass, int fCharge) : fName_(fName), fMass_(fMass), fCharge_(fCharge) {}
-
 const char* ParticleType::GetfName() const {
     return fName_;
 }
@@ -17,7 +15,7 @@ const int ParticleType::GetfCharge() const {  //stessa cosa della funzione GetfM
 }
 
 void ParticleType::Print() const {
-    cout << "Particle Name: " << GetfName << endl;
-    cout << "Particle Mass: " << GetfMass << endl;
-    cout << "Particle Charge: " << GetfCharge << endl;
+    std::cout << "Particle Name: " << GetfName() << '\n';
+    std::cout << "Particle Mass: " << GetfMass() << '\n';
+    std::cout << "Particle Charge: " << GetfCharge() << '\n';
 }
