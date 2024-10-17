@@ -1,4 +1,4 @@
-#include "ParticleType.h"
+#include "ParticleType.hpp"
 
 #ifndef RESONANCETYPE_H
 #define RESONANCETYPE_H
