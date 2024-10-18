@@ -7,18 +7,18 @@ class ParticleType{
     private:             // dichiariamo le caratteristiche genrelai delle particelle
                          // come costanti, invariabili nel codice
 
-    const char* fName_;   //nome della particella
+    const std::string fName_;   //nome della particella
     const double fMass_;  //massa della particella
     const int fCharge_;   // carica della particella
 
     public:
 
     //costruttore parametrico
-    ParticleType(const char* fName, double fMass, int fCharge) :
+    ParticleType(const std::string fName, double fMass, int fCharge) :
         fName_(fName), fMass_(fMass), fCharge_(fCharge) {};
 
     //metodi getter
-    const char* GetfName() const;
+    const std::string GetfName() const;
     double GetfMass() const;
     int GetfCharge() const;
 

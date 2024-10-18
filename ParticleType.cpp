@@ -1,7 +1,7 @@
 #include "ParticleType.hpp"
 #include <iostream>
 
-const char* ParticleType::GetfName() const {
+const std::string ParticleType::GetfName() const {
     return fName_;
 }
 
@@ -19,5 +19,6 @@ void ParticleType::Print() const {
     std::cout << "Particle Mass: " << GetfMass() << '\n';
     std::cout << "Particle Charge: " << GetfCharge() << '\n';
 }
+
 
 //ParticleType::~ParticleType() {}
