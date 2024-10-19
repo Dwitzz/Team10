@@ -20,7 +20,7 @@ class Particle {
   const static int FindParticle(const std::string& particleName);
 
  public:
-  Particle::Particle(const std::string& particleName, double Px = 0,
+  Particle(const std::string& particleName, double Px = 0,
                      double Py = 0, double Pz = 0);
 
   const int getParticle(Particle particle) const;

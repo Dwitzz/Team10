@@ -23,8 +23,8 @@ const int Particle::FindParticle(const std::string& particleName) {
   }
 }
 
-Particle::Particle(const std::string& particleName, double Px = 0,
-                   double Py = 0, double Pz = 0)
+Particle::Particle(const std::string& particleName, double Px, double Py,
+                   double Pz)
     : fIndex(FindParticle(particleName)), fPx(Px), fPy(Py), fPz(Pz) {}
 
 const int Particle::getParticle(Particle particle) const {
@@ -51,7 +51,7 @@ void Particle::setParticle(const std::string& particleName) {
 }
 
 void Particle::AddParticleType(const std::string& name, const double mass,
-                               const int charge, const double width = 0) {
+                               const int charge, const double width) {
   if (fNParticleType >= 7) {
     std::cout << "Maximum number of particles reached. Cannot define more.\n";
     return;
@@ -75,7 +75,7 @@ void Particle::AddParticleType(const std::string& name, const double mass,
 
 void Particle::setParcticleType(const int i, const std::string& name,
                                 const double mass, const int charge,
-                                const double width = 0) {
+                                const double width) {
   if (width == 0) {
     ParticleTable[i] = new ParticleType(name, mass, charge);
   }
