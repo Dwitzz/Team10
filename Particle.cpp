@@ -4,23 +4,21 @@
 #include <algorithm>
 #include <cmath>
 
-const inline static std::vector<std::string> nameList{"pi+", "pi-", "K+", "K-",
-                                                      "P+",  "P-",  "K*"};
+/* const inline static std::vector<std::string> nameList{"pi+", "pi-", "K+",
+"K-","P+",  "P-",  "K*"}; */ // commentato via, non dovrebbe servire piu
 
 const int Particle::FindParticle(const std::string& particleName) {
   int index{};
 
   for (int i{0}; i < fNParticleType; i++) {
-    if (ParticleTable[i]->GetfName() == particleName) {
+    if (ParticleTable[i] && ParticleTable[i]->GetfName() == particleName) {
       index = i;
       return index;
     }
-
-    if (i == fNParticleType) {
-      std::cout << "No match for given name: " << particleName << '\n';
-      return -1;
-    }
   }
+
+  std::cout << "No match for given name: " << particleName << '\n';
+  return -1;
 }
 
 Particle::Particle(const std::string& particleName, double Px, double Py,
@@ -31,7 +29,7 @@ const int Particle::getParticle(Particle particle) const {
   return particle.fIndex;
 }
 
-void Particle::setParcticle(const int index) {
+void Particle::setParticle(const int index) {
   if (index < fNParticleType) {
     fIndex = index;
   } else {
@@ -61,8 +59,8 @@ void Particle::AddParticleType(const std::string& name, const double mass,
     std::cout << "Now defining " << name << '\n';
 
     for (int i{}; i < 7; ++i) {
-      if (ParticleTable[i]->GetfName().empty()) {
-        setParcticleType(i, name, mass, charge, width);
+      if (ParticleTable[i] == nullptr || ParticleTable[i]->GetfName().empty()) {
+        setParticleType(i, name, mass, charge, width);
         ++fNParticleType;
         return;
       }
@@ -73,9 +71,9 @@ void Particle::AddParticleType(const std::string& name, const double mass,
   }
 }
 
-void Particle::setParcticleType(const int i, const std::string& name,
-                                const double mass, const int charge,
-                                const double width) {
+void Particle::setParticleType(const int i, const std::string& name,
+                               const double mass, const int charge,
+                               const double width) {
   if (width == 0) {
     ParticleTable[i] = new ParticleType(name, mass, charge);
   }
@@ -123,4 +121,14 @@ void Particle::setP(double Px, double Py, double Pz) {
   fPx = Px;
   fPy = Py;
   fPz = Pz;
+}
+
+void Particle::ClearParticleTable() {
+  for (int i = 0; i < fNParticleType; ++i) {
+    if (ParticleTable[i] != nullptr) {
+      delete ParticleTable[i];
+      ParticleTable[i] = nullptr;
+    }
+  }
+  fNParticleType = 0;
 }
