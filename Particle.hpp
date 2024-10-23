@@ -16,13 +16,15 @@ class Particle {
   double fPy;
   double fPz;
 
-  const static int FindParticle(const std::string& particleName);
+  static int FindParticle(const std::string& particleName);
+
+  void Boost(double bx, double by, double bz);
 
  public:
   Particle(const std::string& particleName, double Px = 0, double Py = 0,
            double Pz = 0);
 
-  const int getParticle(Particle particle) const;
+  int getParticle(Particle particle) const;
 
   static void AddParticleType(const std::string& name, const double mass,
                               const int charge, const double width = 0);
@@ -46,7 +48,10 @@ class Particle {
   double getInvMass(Particle& p) const;
   void setP(double Px, double Py, double Pz);
 
-  static void ClearParticleTable(); //use it in tests to try to avoid memory problems
+  int Decay2body(Particle& dau1, Particle& dau2) const;
+
+  static void
+  ClearParticleTable();  // use it in tests to try to avoid memory problems
 };
 
 double vectorNorm(double x, double y, double z);

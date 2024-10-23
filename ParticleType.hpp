@@ -26,6 +26,8 @@ class ParticleType{
     virtual void Print() const;
     //virtual ~ParticleType();
 
+    virtual double GetfWidth() const;    
+
 };
 
 

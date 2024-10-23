@@ -16,8 +16,8 @@ class ResonanceType : public ParticleType {
   ResonanceType(const std::string fName, double fMass, int fCharge,
                 double fWidth)
       : ParticleType(fName, fMass, fCharge), fWidth_(fWidth) {}
-  double GetfWidth() const;
-  virtual void Print() const override;
+  virtual double GetfWidth() const  ;
+  virtual void Print() const ;
 };
 
 #endif
