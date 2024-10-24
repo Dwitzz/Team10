@@ -108,6 +108,7 @@ int main() {
         eventParticles[j].setParticle(6);
 
         firstEmptySlot = checkEmptySlot(eventParticles);
+        rndm = gRandom->Uniform(0., 1.);
 
         if (rndm <= 0.5) {
           eventParticles[firstEmptySlot].setParticle(
@@ -142,7 +143,7 @@ int main() {
       h_Phi_Theta->Fill(phi, theta);
       h_Trasverse_Impulse->Fill(
           std::sqrt((std::pow((eventParticles[j].getPx()), 2.) -
-                    std::pow((eventParticles[j].getPy()), 2.))));
+                     std::pow((eventParticles[j].getPy()), 2.))));
     }
 
     // fills h_Invariant_mass_opp_sign
