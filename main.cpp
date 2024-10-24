@@ -87,11 +87,11 @@ int main() {
       } else if (rndm > 0.945 && rndm <= 0.99) {
         eventParticles[j].setParticle(5);
       } else {
+        eventParticles[j].setParticle(6);
+
+        firstEmptySlot = checkEmptySlot(eventParticles);
+
         if (rndm <= 0.5) {
-          eventParticles[j].setParticle(6);
-
-          firstEmptySlot = checkEmptySlot(eventParticles);
-
           eventParticles[firstEmptySlot].setParticle(
               0);  // sets the first empty slot to pi+
           eventParticles[firstEmptySlot + 1].setParticle(
@@ -104,10 +104,6 @@ int main() {
               eventParticles[firstEmptySlot +
                              1]);  // passes the above K- by reference
         } else {
-          eventParticles[j].setParticle(6);
-
-          firstEmptySlot = checkEmptySlot(eventParticles);
-
           eventParticles[firstEmptySlot].setParticle(
               1);  // sets the first empty slot to pi-
           eventParticles[firstEmptySlot + 1].setParticle(
