@@ -136,11 +136,13 @@ int main() {
         }
       }
 
+      h_Energy->Fill(eventParticles[j].getEnergy());
       h_Impulse->Fill(P);
       h_Particle_Type->Fill(eventParticles[j].getIndex());
       h_Phi_Theta->Fill(phi, theta);
-      h_Trasverse_Impulse->Fill(std::sqrt(
-          (std::pow(P, 2.) - std::pow((eventParticles[j].getPz()), 2.))));
+      h_Trasverse_Impulse->Fill(
+          std::sqrt((std::pow((eventParticles[j].getPx()), 2.) -
+                    std::pow((eventParticles[j].getPy()), 2.))));
     }
 
     // fills h_Invariant_mass_opp_sign
