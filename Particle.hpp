@@ -11,16 +11,18 @@ class Particle {
   inline static std::array<ParticleType*, fMaxNumParticleType> ParticleTable{};
   inline static int fNParticleType{0};
 
-  int fIndex;
-  double fPx;
-  double fPy;
-  double fPz;
+  int fIndex{};
+  double fPx{};
+  double fPy{};
+  double fPz{};
 
   static int FindParticle(const std::string& particleName);
 
   void Boost(double bx, double by, double bz);
 
  public:
+  Particle() : fIndex(-1), fPx(0.), fPy(0.), fPz(0.) {};
+
   Particle(const std::string& particleName, double Px = 0, double Py = 0,
            double Pz = 0);
 
@@ -40,6 +42,7 @@ class Particle {
 
   void printParticle() const;
 
+  int getIndex() const;
   double getPx() const;
   double getPy() const;
   double getPz() const;

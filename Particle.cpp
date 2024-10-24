@@ -98,6 +98,7 @@ void Particle::printParticle() const {
             << " )\n";
 }
 
+int Particle::getIndex() const {return fIndex;}
 double Particle::getPx() const { return fPx; }
 double Particle::getPy() const { return fPy; }
 double Particle::getPz() const { return fPz; }
@@ -211,3 +212,6 @@ int Particle::Decay2body(Particle& dau1, Particle& dau2) const {
 
   return 0;
 }
+
+
+
