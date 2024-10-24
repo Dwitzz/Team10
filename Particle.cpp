@@ -2,7 +2,7 @@
 #include "Particle.hpp"
 
 #include <algorithm>
-#include <cmath>
+
 #include <cmath>    // for M_PI
 #include <cstdlib>  //for RAND_MAX
 
@@ -27,9 +27,7 @@ Particle::Particle(const std::string& particleName, double Px, double Py,
                    double Pz)
     : fIndex(FindParticle(particleName)), fPx(Px), fPy(Py), fPz(Pz) {}
 
-int Particle::getParticle(Particle particle) const {
-  return particle.fIndex;
-}
+int Particle::getParticle(Particle particle) const { return particle.fIndex; }
 
 void Particle::setParticle(const int index) {
   if (index < fNParticleType) {
@@ -98,10 +96,13 @@ void Particle::printParticle() const {
             << " )\n";
 }
 
-int Particle::getIndex() const {return fIndex;}
+int Particle::getIndex() const { return fIndex; }
 double Particle::getPx() const { return fPx; }
 double Particle::getPy() const { return fPy; }
 double Particle::getPz() const { return fPz; }
+double Particle::getCharge() const {
+  return ParticleTable[fIndex]->GetfCharge();
+}
 double Particle::getMass() const { return ParticleTable[fIndex]->GetfMass(); }
 
 double Particle::getEnergy() const {
@@ -212,6 +213,3 @@ int Particle::Decay2body(Particle& dau1, Particle& dau2) const {
 
   return 0;
 }
-
-
-

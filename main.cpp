@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include "Particle.hpp"
 #include "ParticleType.hpp"
 #include "ResonanceType.hpp"
@@ -58,9 +60,25 @@ int main() {
   TH1F *h_Energy = new TH1F("h_Energy", "Energy", 100, 0., 2.);
   h_Energy->Sumw2();
 
-  TH1F *h_Invariant_mass =
-      new TH1F("h_Invariant_mass", "Invariant mass", 100, 0., 2);
-  h_Invariant_mass->Sumw2();
+  TH1F *h_Invariant_mass_opp_sign =
+      new TH1F("h_Invariant_mass_opp_sign",
+               "Invariant mass: opposite signed particles", 100, 0., 2);
+  h_Invariant_mass_opp_sign->Sumw2();
+
+  TH1F *h_Invariant_mass_same_sign =
+      new TH1F("h_Invariant_mass_same_sign",
+               "Invariant mass: same signed particles", 100, 0., 2);
+  h_Invariant_mass_same_sign->Sumw2();
+
+  TH1F *h_Invariant_mass_opp_sign_decay =
+      new TH1F("h_Invariant_mass_opp_sign_decay",
+               "Invariant mass: opposite signed decayed particles", 100, 0., 2);
+  h_Invariant_mass_opp_sign_decay->Sumw2();
+
+  TH1F *h_Invariant_mass_same_sign_decay =
+      new TH1F("h_Invariant_mass_same_sign_decay",
+               "Invariant mass: same signed decayed particles", 100, 0., 2);
+  h_Invariant_mass_same_sign_decay->Sumw2();
 
   for (int i{}; i < 1E5; i++) {
     for (int j{}; j < 100; ++j) {
@@ -115,6 +133,78 @@ int main() {
                                                // reference
               eventParticles[firstEmptySlot +
                              1]);  // passes the above K+ by reference
+        }
+      }
+
+      h_Impulse->Fill(P);
+      h_Particle_Type->Fill(eventParticles[j].getIndex());
+      h_Phi_Theta->Fill(phi, theta);
+      h_Trasverse_Impulse->Fill(std::sqrt(
+          (std::pow(P, 2.) - std::pow((eventParticles[j].getPz()), 2.))));
+    }
+
+    // fills h_Invariant_mass_opp_sign
+    for (int k{}; k <= firstEmptySlot + 1;
+         ++k)  // firstEmptySlot + 1 is the last defined particle in the array
+    {
+      for (int a{k + 1}; a <= firstEmptySlot + 1; ++a) {
+        if (eventParticles[a].getIndex() == 6) {
+        } else if (eventParticles[a].getCharge() !=
+                   eventParticles[k].getCharge()) {
+          h_Invariant_mass_opp_sign->Fill(
+              eventParticles[k].getInvMass(eventParticles[a]));
+        }
+      }
+    }
+
+    // fills h_Invariant_mass_same_sign
+    for (int k{}; k <= firstEmptySlot + 1;
+         ++k)  // firstEmptySlot + 1 is the last defined particle in the array
+    {
+      for (int a{k + 1}; a <= firstEmptySlot + 1; ++a) {
+        if (eventParticles[a].getIndex() == 6) {
+        } else if (eventParticles[a].getCharge() ==
+                   eventParticles[k].getCharge()) {
+          h_Invariant_mass_same_sign->Fill(
+              eventParticles[k].getInvMass(eventParticles[a]));
+        }
+      }
+    }
+
+    // fills h_Invariant_mass_opp_sign_decay
+    for (int k{}; k <= firstEmptySlot + 1;
+         ++k)  // firstEmptySlot + 1 is the last defined particle in the array
+    {
+      if (eventParticles[k].getIndex() == 0 ||
+          eventParticles[k].getIndex() == 1) {
+        for (int a{k + 1}; a <= firstEmptySlot + 1; ++a) {
+          // check that both the index numbers and the charge pairing are the
+          // desired ones
+          if ((eventParticles[a].getIndex() == 2 ||
+               eventParticles[a].getIndex() == 3) &&
+              eventParticles[a].getCharge() != eventParticles[k].getCharge()) {
+            h_Invariant_mass_opp_sign_decay->Fill(
+                eventParticles[k].getInvMass(eventParticles[a]));
+          }
+        }
+      }
+    }
+
+    // fills h_Invariant_mass_same_sign_decay
+    for (int k{}; k <= firstEmptySlot + 1;
+         ++k)  // firstEmptySlot + 1 is the last defined particle in the array
+    {
+      if (eventParticles[k].getIndex() == 0 ||
+          eventParticles[k].getIndex() == 1) {
+        for (int a{k + 1}; a <= firstEmptySlot + 1; ++a) {
+          // check that both the index numbers and the charge pairing are the
+          // desired ones
+          if ((eventParticles[a].getIndex() == 2 ||
+               eventParticles[a].getIndex() == 3) &&
+              eventParticles[a].getCharge() == eventParticles[k].getCharge()) {
+            h_Invariant_mass_same_sign_decay->Fill(
+                eventParticles[k].getInvMass(eventParticles[a]));
+          }
         }
       }
     }

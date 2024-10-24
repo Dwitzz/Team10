@@ -46,6 +46,7 @@ class Particle {
   double getPx() const;
   double getPy() const;
   double getPz() const;
+  double getCharge() const;
   double getMass() const;
   double getEnergy() const;
   double getInvMass(Particle& p) const;
