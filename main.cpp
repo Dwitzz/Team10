@@ -37,18 +37,17 @@ int main() {
 
   double rndm{};  // used below to decide which type of particles is generated
 
-  gRandom->SetSeed(); 
+  gRandom->SetSeed();
 
   for (int i{}; i < 1E5; i++) {
     for (int j{}; j < 100; ++j) {
-      
       phi = gRandom->Uniform(0.0, 2 * TMath::Pi());
       theta = gRandom->Uniform(0.0, TMath::Pi());
       P = gRandom->Exp(1);
 
       eventParticles[j].setP(P * TMath::Sin(theta) * TMath::Cos(phi),
-                            P * TMath::Sin(theta) * TMath::Sin(phi),
-                            P * TMath::Cos(theta));
+                             P * TMath::Sin(theta) * TMath::Sin(phi),
+                             P * TMath::Cos(theta));
 
       rndm = gRandom->Uniform(0., 1.);
 
@@ -65,21 +64,39 @@ int main() {
       } else if (rndm > 0.945 && rndm <= 0.99) {
         eventParticles[j].setParticle(5);
       } else {
-        eventParticles[j].setParticle(6);
+        if (rndm <= 0.5) {
+          eventParticles[j].setParticle(6);
 
-        firstEmptySlot = checkEmptySlot(eventParticles);
+          firstEmptySlot = checkEmptySlot(eventParticles);
 
-        eventParticles[firstEmptySlot].setParticle(
-            0);  // sets the first empty slot to pi+
-        eventParticles[firstEmptySlot + 1].setParticle(
-            3);  // sets the first empty slot to K- (the one after the above
-                 // pi+)
+          eventParticles[firstEmptySlot].setParticle(
+              0);  // sets the first empty slot to pi+
+          eventParticles[firstEmptySlot + 1].setParticle(
+              3);  // sets the first empty slot to K- (the one after the above
+                   // pi+)
 
-        eventParticles[j].Decay2body(
-            eventParticles[firstEmptySlot],  // passes the above pi+ by
-                                             // reference
-            eventParticles[firstEmptySlot +
-                           1]);  // passes the above K- by reference
+          eventParticles[j].Decay2body(
+              eventParticles[firstEmptySlot],  // passes the above pi+ by
+                                               // reference
+              eventParticles[firstEmptySlot +
+                             1]);  // passes the above K- by reference
+        } else {
+          eventParticles[j].setParticle(6);
+
+          firstEmptySlot = checkEmptySlot(eventParticles);
+
+          eventParticles[firstEmptySlot].setParticle(
+              1);  // sets the first empty slot to pi-
+          eventParticles[firstEmptySlot + 1].setParticle(
+              2);  // sets the first empty slot to K+ (the one after the above
+                   // pi-)
+
+          eventParticles[j].Decay2body(
+              eventParticles[firstEmptySlot],  // passes the above pi- by
+                                               // reference
+              eventParticles[firstEmptySlot +
+                             1]);  // passes the above K+ by reference
+        }
       }
     }
   }
