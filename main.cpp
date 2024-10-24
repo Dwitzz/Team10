@@ -5,7 +5,7 @@
 static constexpr int N = 130;  // constexpr implies inline so it can be defined
                                // in multiple files for clarity purposes
 
-int checkEmptySlot(std::array<Particle, N>& eventParticles) {
+int checkEmptySlot(std::array<Particle, N> &eventParticles) {
   for (int i{100}; i < N; ++i) {
     if (eventParticles[i].getIndex() == -1)
       ;
@@ -38,6 +38,29 @@ int main() {
   double rndm{};  // used below to decide which type of particles is generated
 
   gRandom->SetSeed();
+
+  TH1F *h_Particle_Type =
+      new TH1F("h_Particle_Type", "Particle Type", 7, 0., 7.);
+  h_Particle_Type->Sumw2();
+
+  TH2F *h_Phi_Theta =
+      new TH2F("h_Phi_Theta", "Azimuthal(phi)_x & polar(theta)_y angles", 100,
+               0., 2 * TMath::Pi(), 200, 0., TMath::Pi());
+  h_Phi_Theta->Sumw2();
+
+  TH1F *h_Impulse = new TH1F("h_Impulse", "Impulse", 100, 0., 7);
+  h_Impulse->Sumw2();
+
+  TH1F *h_Trasverse_Impulse =
+      new TH1F("h_Trasverse_Impulse", "Trasverse Impulse", 100, 0., 7.);
+  h_Trasverse_Impulse->Sumw2();
+
+  TH1F *h_Energy = new TH1F("h_Energy", "Energy", 100, 0., 2.);
+  h_Energy->Sumw2();
+
+  TH1F *h_Invariant_mass =
+      new TH1F("h_Invariant_mass", "Invariant mass", 100, 0., 2);
+  h_Invariant_mass->Sumw2();
 
   for (int i{}; i < 1E5; i++) {
     for (int j{}; j < 100; ++j) {
