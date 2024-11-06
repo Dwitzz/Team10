@@ -9,9 +9,7 @@ static constexpr int N = 130;  // constexpr implies inline so it can be defined
 
 int checkEmptySlot(std::array<Particle, N> &eventParticles) {
   for (int i{100}; i < N; ++i) {
-    if (eventParticles[i].getIndex() == -1)
-      ;
-    return i;
+    if (eventParticles[i].getIndex() == -1) return i;
   }
 
   std::cout << "Maximum capacity reached. Cannot compute. \n";
@@ -32,7 +30,7 @@ int main() {
 
   int firstEmptySlot{};  // used in the for loop below (j) to indicate the first
                          // empty slot
-
+  int lastFilledSlot{};
   double phi{};
   double theta{};
   double P{};
@@ -80,6 +78,10 @@ int main() {
                "Invariant mass: same signed charge pi-k pairs", 100, 0., 2);
   h_Invariant_mass_same_sign_pi_k->Sumw2();
 
+  TH1F *h_Benchmark =
+      new TH1F("h_Benchmark", "Invariant mass: K* decay pairs", 100, 0., 2.);
+ // h_Benchmark->Sumw2();
+
   for (int i{}; i < 1E5; i++) {
     for (int j{}; j < 100; ++j) {
       phi = gRandom->Uniform(0.0, 2 * TMath::Pi());
@@ -108,9 +110,9 @@ int main() {
         eventParticles[j].setParticle(6);
 
         firstEmptySlot = checkEmptySlot(eventParticles);
-        rndm = gRandom->Uniform(0., 1.);
+        //rndm = gRandom->Uniform(0., 1.);
 
-        if (rndm <= 0.5) {
+        if (rndm <= 0.995) {
           eventParticles[firstEmptySlot].setParticle(
               0);  // sets the first empty slot to pi+
           eventParticles[firstEmptySlot + 1].setParticle(
@@ -122,6 +124,9 @@ int main() {
                                                // reference
               eventParticles[firstEmptySlot +
                              1]);  // passes the above K- by reference
+
+          h_Benchmark->Fill(eventParticles[firstEmptySlot].getInvMass(
+              eventParticles[firstEmptySlot + 1]));
         } else {
           eventParticles[firstEmptySlot].setParticle(
               1);  // sets the first empty slot to pi-
@@ -134,6 +139,8 @@ int main() {
                                                // reference
               eventParticles[firstEmptySlot +
                              1]);  // passes the above K+ by reference
+          h_Benchmark->Fill(eventParticles[firstEmptySlot].getInvMass(
+              eventParticles[firstEmptySlot + 1]));
         }
       }
 
@@ -145,12 +152,17 @@ int main() {
           std::sqrt((std::pow((eventParticles[j].getPx()), 2.) -
                      std::pow((eventParticles[j].getPy()), 2.))));
     }
+    if (firstEmptySlot == -1) {
+      lastFilledSlot = 99;
+    } else {
+      lastFilledSlot = firstEmptySlot + 1;
+    }
 
     // fills h_Invariant_mass_opp_sign
-    for (int k{}; k <= firstEmptySlot + 1;
-         ++k)  // firstEmptySlot + 1 is the last defined particle in the array
+    for (int k{}; k < lastFilledSlot;
+         ++k)  // lastFilledSlot is the last defined particle in the array
     {
-      for (int a{k + 1}; a <= firstEmptySlot + 1; ++a) {
+      for (int a{k + 1}; a <=  lastFilledSlot; ++a) {
         if (eventParticles[a].getIndex() == 6) {
         }
         // fills h_Invariant_mass_opp_sign
@@ -185,5 +197,52 @@ int main() {
         }
       }
     }
+
+    //std::cout << lastFilledSlot << '\n';
+    if (firstEmptySlot != -1) {
+      for (int i{100}; i <= lastFilledSlot; ++i) {
+        eventParticles[i].setNeutral();
+        //std::cout << eventParticles[i].getIndex() << '\n';
+      }
+    }
+    firstEmptySlot = -1;
   }
+
+  TCanvas *c1 = new TCanvas("c1", "2x2 Canvas", 800, 800);
+  c1->Divide(2, 2);
+  c1->cd(1);
+  h_Particle_Type->Draw("APE");
+  c1->cd(2);
+  h_Phi_Theta->Draw("APE");
+  c1->cd(3);
+  h_Impulse->Draw("APE");
+  c1->cd(4);
+  h_Trasverse_Impulse->Draw("APE");
+
+  c1->Update();
+
+  TCanvas *c2 = new TCanvas("c2", "2x2 Canvas", 800, 800);
+  c2->Divide(2, 2);
+  c2->cd(1);
+  h_Invariant_mass_same_sign_pi_k->Draw("APE");
+  c2->cd(2);
+  h_Invariant_mass_opp_sign->Draw("APE");
+  c2->cd(3);
+  h_Invariant_mass_same_sign->Draw("APE");
+  c2->cd(4);
+  h_Invariant_mass_opp_sign_pi_k->Draw("APE");
+  c2->Update();
+
+  h_Energy->Draw("APE");
+
+  TCanvas *c3 = new TCanvas("c3", "2x2 Canvas", 800, 800);
+  c3->Divide(1, 1);
+  h_Energy->Draw("APE");
+  c3->cd(1);
+
+  h_Benchmark->Draw("H");
+  c3->cd(2);
+  // h_Benchmark->Draw("E,P,SAME");
+
+  Particle::ClearParticleTable();
 }

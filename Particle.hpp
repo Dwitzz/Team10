@@ -50,6 +50,7 @@ class Particle {
   double getMass() const;
   double getEnergy() const;
   double getInvMass(Particle& p) const;
+  void setNeutral(); 
   void setP(double Px, double Py, double Pz);
 
   int Decay2body(Particle& dau1, Particle& dau2) const;

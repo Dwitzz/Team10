@@ -6,16 +6,13 @@
 #include <cmath>    // for M_PI
 #include <cstdlib>  //for RAND_MAX
 
-/* const inline static std::vector<std::string> nameList{"pi+", "pi-", "K+",
-"K-","P+",  "P-",  "K*"}; */ // commentato via, non dovrebbe servire piu
 
 int Particle::FindParticle(const std::string& particleName) {
-  int index{};
+  
 
   for (int i{0}; i < fNParticleType; i++) {
-    if (ParticleTable[i] && ParticleTable[i]->GetfName() == particleName) {
-      index = i;
-      return index;
+    if (ParticleTable[i]->GetfName() == particleName) {
+      return i;
     }
   }
 
@@ -112,14 +109,18 @@ double Particle::getEnergy() const {
 
 double Particle::getInvMass(Particle& other) const {
   return std::sqrt(std::pow(getEnergy() + other.getEnergy(), 2) -
-                   std::pow(vectorNorm(fPx - other.getPx(), fPy - other.getPy(),
-                                       fPz - other.getPz()),
+                   std::pow(vectorNorm(fPx + other.getPx(), fPy + other.getPy(),
+                                       fPz + other.getPz()),
                             2));
 }
 
 double vectorNorm(double x, double y, double z) {
   return std::sqrt(std::pow(x, 2) + std::pow(y, 2) + std::pow(z, 2));
 }
+
+
+
+void Particle::setNeutral() {fIndex = -1;}
 
 void Particle::setP(double Px, double Py, double Pz) {
   fPx = Px;
