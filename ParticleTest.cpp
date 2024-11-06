@@ -43,12 +43,12 @@ TEST_SUITE("Particle") {
     Particle::AddParticleType("electron", 0.511, -1);
     Particle::AddParticleType("positron", 0.511, 1);
 
-    Particle electron("electron", 1., 0., 0.);
-    Particle positron("positron", -1., 0., 0.);
+    Particle electron("electron", 1., 0., 1.);
+    Particle positron("positron", -2., 0., 0.);
 
     double expectedInvMass =
         std::sqrt(std::pow(electron.getEnergy() + positron.getEnergy(), 2) -
-                  std::pow(vectorNorm(2.0, 0.0, 0.0), 2)); //brutto calcolo spero vada bene
+                  std::pow(vectorNorm(-1., 0., 1.), 2)); //brutto calcolo spero vada bene
     CHECK(electron.getInvMass(positron) == doctest::Approx(expectedInvMass));
   }
 
