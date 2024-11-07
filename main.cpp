@@ -71,7 +71,7 @@ int main() {
 
   TH1F *h_Invariant_mass_opp_sign_pi_k =
       new TH1F("h_Invariant_mass_opp_sign_pi_k",
-               "Invariant mass: same opposite charge pi-k pairs", 100, 0., 2);
+               "Invariant mass: opposite signed charge pi-k pairs", 100, 0., 2);
   h_Invariant_mass_opp_sign_pi_k->Sumw2();
 
   TH1F *h_Invariant_mass_same_sign_pi_k =
@@ -81,7 +81,7 @@ int main() {
 
   TH1F *h_Benchmark =
       new TH1F("h_Benchmark", "Invariant mass: K* decay pairs", 100, 0., 2.);
-  // h_Benchmark->Sumw2();
+  h_Benchmark->Sumw2();
 
   for (int i{}; i < 1E5; i++) {
     for (int j{}; j < 100; ++j) {
@@ -103,6 +103,7 @@ int main() {
         eventParticles[j].setParticle(2);
       } else if (rndm > 0.85 && rndm <= 0.9) {
         eventParticles[j].setParticle(3);
+
       } else if (rndm > 0.9 && rndm <= 0.945) {
         eventParticles[j].setParticle(4);
       } else if (rndm > 0.945 && rndm <= 0.99) {
@@ -121,8 +122,8 @@ int main() {
                    // pi+)
 
           eventParticles[j].Decay2body(
-              eventParticles[firstEmptySlot],  // passes the above pi+ by
-                                               // reference
+              eventParticles[firstEmptySlot],  // passes the above pi+
+                                               // by reference
               eventParticles[firstEmptySlot +
                              1]);  // passes the above K- by reference
 
@@ -133,11 +134,11 @@ int main() {
               1);  // sets the first empty slot to pi-
           eventParticles[firstEmptySlot + 1].setParticle(
               2);  // sets the first empty slot to K+ (the one after the above
-                   // pi-)
+          // pi-)
 
           eventParticles[j].Decay2body(
-              eventParticles[firstEmptySlot],  // passes the above pi- by
-                                               // reference
+              eventParticles[firstEmptySlot],  // passes the above pi-
+                                               // by reference
               eventParticles[firstEmptySlot +
                              1]);  // passes the above K+ by reference
           h_Benchmark->Fill(eventParticles[firstEmptySlot].getInvMass(
@@ -172,7 +173,9 @@ int main() {
                  eventParticles[k].getCharge()) {
           h_Invariant_mass_opp_sign->Fill(
               eventParticles[k].getInvMass(eventParticles[a]));
+
         }
+
         // fills h_Invariant_mass_same_sign
         else if (eventParticles[a].getCharge() ==
                  eventParticles[k].getCharge()) {
@@ -182,19 +185,31 @@ int main() {
 
         if (eventParticles[k].getIndex() == 0 ||
             eventParticles[k].getIndex() == 1) {
-          // fills h_Invariant_mass_opp_sign_pi_k
           if ((eventParticles[a].getIndex() == 2 ||
-               eventParticles[a].getIndex() == 3) &&
-              eventParticles[a].getCharge() != eventParticles[k].getCharge()) {
-            h_Invariant_mass_opp_sign_pi_k->Fill(
-                eventParticles[k].getInvMass(eventParticles[a]));
+               eventParticles[a].getIndex() == 3)) {
+            if (eventParticles[a].getCharge() !=
+                eventParticles[k].getCharge()) {
+              h_Invariant_mass_opp_sign_pi_k->Fill(
+                  eventParticles[k].getInvMass(eventParticles[a]));
+            } else {
+              h_Invariant_mass_same_sign_pi_k->Fill(
+                  eventParticles[k].getInvMass(eventParticles[a]));
+            }
           }
-          // fills h_Invariant_mass_same_sign_pi_k
-          if ((eventParticles[a].getIndex() == 2 ||
-               eventParticles[a].getIndex() == 3) &&
-              eventParticles[a].getCharge() == eventParticles[k].getCharge()) {
-            h_Invariant_mass_same_sign_pi_k->Fill(
-                eventParticles[k].getInvMass(eventParticles[a]));
+        }
+
+        if (eventParticles[k].getIndex() == 2 ||
+            eventParticles[k].getIndex() == 3) {
+          if ((eventParticles[a].getIndex() == 0 ||
+               eventParticles[a].getIndex() == 1)) {
+            if (eventParticles[a].getCharge() !=
+                eventParticles[k].getCharge()) {
+              h_Invariant_mass_opp_sign_pi_k->Fill(
+                  eventParticles[k].getInvMass(eventParticles[a]));
+            } else {
+              h_Invariant_mass_same_sign_pi_k->Fill(
+                  eventParticles[k].getInvMass(eventParticles[a]));
+            }
           }
         }
       }
@@ -244,4 +259,21 @@ int main() {
   // h_Benchmark->Draw("E,P,SAME");
 
   Particle::ClearParticleTable();
+
+  TFile *file = new TFile("histos_progetto.root", "RECREATE" );
+  h_Particle_Type->Write();
+  h_Phi->Write();
+  h_Theta->Write();
+  h_Impulse->Write();
+  h_Trasverse_Impulse->Write();
+  h_Energy->Write();
+  h_Invariant_mass_same_sign_pi_k->Write();
+  h_Invariant_mass_opp_sign->Write();
+  h_Invariant_mass_same_sign->Write();
+  h_Invariant_mass_opp_sign_pi_k->Write();
+  h_Benchmark->Write();
+
+  file->Close();
+
+
 }
