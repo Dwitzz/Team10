@@ -1,3 +1,4 @@
+
 #include <cmath>
 
 #include "Particle.hpp"
@@ -46,14 +47,14 @@ int main() {
   TH1F *h_Phi = new TH1F("h_Phi", "Azimuthal angle", 100, 0., 2 * TMath::Pi());
   h_Phi->Sumw2();
 
-  TH1F *h_Theta = new TH1F("h_Theta", "Polar angle", 200, 0., TMath::Pi());
+  TH1F *h_Theta = new TH1F("h_Theta", "Polar angle", 100, 0., TMath::Pi());
   h_Theta->Sumw2();
 
   TH1F *h_Impulse = new TH1F("h_Impulse", "Impulse", 100, 0., 7);
   h_Impulse->Sumw2();
 
   TH1F *h_Trasverse_Impulse =
-      new TH1F("h_Trasverse_Impulse", "Trasverse Impulse", 100, 0., 7.);
+      new TH1F("h_Trasverse_Impulse", "Trasverse Impulse", 100, 0., 5.);
   h_Trasverse_Impulse->Sumw2();
 
   TH1F *h_Energy = new TH1F("h_Energy", "Energy", 100, 0., 2.);
@@ -225,32 +226,68 @@ int main() {
     firstEmptySlot = -1;
   }
 
-  TCanvas *c1 = new TCanvas("c1", "3x3 Canvas", 1200, 800);
-  c1->Divide(3, 3);
+  TCanvas *c1 = new TCanvas("c1", "3x2 Canvas", 1200, 800);
+  c1->Divide(3, 2);
   c1->cd(1);
-  h_Particle_Type->Draw("APE");
+  h_Particle_Type->GetYaxis()->SetTitle("Density Probability");
+  h_Particle_Type->Draw("HIST E");
+    h_Particle_Type->GetXaxis()->SetBinLabel(1, "Pi+");
+    h_Particle_Type->GetXaxis()->SetBinLabel(2, "Pi-");
+    h_Particle_Type->GetXaxis()->SetBinLabel(3, "K+");
+    h_Particle_Type->GetXaxis()->SetBinLabel(4, "K-");
+    h_Particle_Type->GetXaxis()->SetBinLabel(5, "P+");
+    h_Particle_Type->GetXaxis()->SetBinLabel(6, "P-");
+    h_Particle_Type->GetXaxis()->SetBinLabel(7, "K*");
+    h_Particle_Type->Scale(1.0/1E7);
+
   c1->cd(2);
-  h_Phi->Draw("APE");
+  h_Phi->GetXaxis()->SetTitle("Phi (rad)");
+  h_Phi->GetYaxis()->SetTitle("Occurences");
+  h_Phi->Draw("P E");
+
   c1->cd(3);
-  h_Theta->Draw("APE");
+  h_Theta->GetXaxis()->SetTitle("Theta (rad)");
+  h_Theta->GetYaxis()->SetTitle("Occurences");
+  h_Theta->Draw("P E");
+
   c1->cd(4);
-  h_Impulse->Draw("APE");
+  h_Impulse->GetXaxis()->SetTitle("|Impulse| (GeV)");
+  h_Impulse->GetYaxis()->SetTitle("Occurences");
+  h_Impulse->Draw("P E");
+
   c1->cd(5);
-  h_Trasverse_Impulse->Draw("APE");
+  h_Trasverse_Impulse->GetXaxis()->SetTitle("|Trasverse Impulse| (GeV)");
+  h_Trasverse_Impulse->GetYaxis()->SetTitle("Occurences");
+  h_Trasverse_Impulse->Draw("P E");
+
   c1->cd(6);
-  h_Energy->Draw("APE");
+  h_Energy->GetXaxis()->SetTitle("Energy (J)");
+  h_Energy->GetYaxis()->SetTitle("Occurences");
+  h_Energy->Draw("P E");
   c1->Update();
 
   TCanvas *c2 = new TCanvas("c2", "2x2 Canvas", 800, 800);
   c2->Divide(2, 2);
+
   c2->cd(1);
-  h_Invariant_mass_same_sign_pi_k->Draw("APE");
+  h_Invariant_mass_same_sign_pi_k->GetXaxis()->SetTitle("Mass (GeV)");
+  h_Invariant_mass_same_sign_pi_k->GetYaxis()->SetTitle("Occurences");
+  h_Invariant_mass_same_sign_pi_k->Draw("P E");
+
   c2->cd(2);
-  h_Invariant_mass_opp_sign->Draw("APE");
+  h_Invariant_mass_opp_sign->GetXaxis()->SetTitle("Mass (GeV)");
+  h_Invariant_mass_opp_sign->GetYaxis()->SetTitle("Occurences");
+  h_Invariant_mass_opp_sign->Draw("P E");
+
   c2->cd(3);
-  h_Invariant_mass_same_sign->Draw("APE");
+  h_Invariant_mass_same_sign->GetXaxis()->SetTitle("Mass (GeV)");
+  h_Invariant_mass_same_sign->GetYaxis()->SetTitle("Occurences");
+  h_Invariant_mass_same_sign->Draw("P E");
+
   c2->cd(4);
-  h_Invariant_mass_opp_sign_pi_k->Draw("APE");
+  h_Invariant_mass_opp_sign_pi_k->GetXaxis()->SetTitle("Mass (GeV)");
+  h_Invariant_mass_opp_sign_pi_k->GetYaxis()->SetTitle("Occurences");
+  h_Invariant_mass_opp_sign_pi_k->Draw("P E");
   c2->Update();
 
   TCanvas *c3 = new TCanvas("c3", "Canvas", 800, 800);
