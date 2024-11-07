@@ -43,10 +43,11 @@ int main() {
       new TH1F("h_Particle_Type", "Particle Type", 7, 0., 7.);
   h_Particle_Type->Sumw2();
 
-  TH2F *h_Phi_Theta =
-      new TH2F("h_Phi_Theta", "Azimuthal(phi)_x & polar(theta)_y angles", 100,
-               0., 2 * TMath::Pi(), 200, 0., TMath::Pi());
-  h_Phi_Theta->Sumw2();
+  TH1F *h_Phi = new TH1F("h_Phi", "Azimuthal angle", 100, 0., 2 * TMath::Pi());
+  h_Phi->Sumw2();
+
+  TH1F *h_Theta = new TH1F("h_Theta", "Polar angle", 200, 0., TMath::Pi());
+  h_Theta->Sumw2();
 
   TH1F *h_Impulse = new TH1F("h_Impulse", "Impulse", 100, 0., 7);
   h_Impulse->Sumw2();
@@ -80,7 +81,7 @@ int main() {
 
   TH1F *h_Benchmark =
       new TH1F("h_Benchmark", "Invariant mass: K* decay pairs", 100, 0., 2.);
- // h_Benchmark->Sumw2();
+  // h_Benchmark->Sumw2();
 
   for (int i{}; i < 1E5; i++) {
     for (int j{}; j < 100; ++j) {
@@ -110,7 +111,7 @@ int main() {
         eventParticles[j].setParticle(6);
 
         firstEmptySlot = checkEmptySlot(eventParticles);
-        //rndm = gRandom->Uniform(0., 1.);
+        // rndm = gRandom->Uniform(0., 1.);
 
         if (rndm <= 0.995) {
           eventParticles[firstEmptySlot].setParticle(
@@ -147,7 +148,8 @@ int main() {
       h_Energy->Fill(eventParticles[j].getEnergy());
       h_Impulse->Fill(P);
       h_Particle_Type->Fill(eventParticles[j].getIndex());
-      h_Phi_Theta->Fill(phi, theta);
+      h_Phi->Fill(phi);
+      h_Theta->Fill(theta);
       h_Trasverse_Impulse->Fill(
           std::sqrt((std::pow((eventParticles[j].getPx()), 2.) -
                      std::pow((eventParticles[j].getPy()), 2.))));
@@ -162,7 +164,7 @@ int main() {
     for (int k{}; k < lastFilledSlot;
          ++k)  // lastFilledSlot is the last defined particle in the array
     {
-      for (int a{k + 1}; a <=  lastFilledSlot; ++a) {
+      for (int a{k + 1}; a <= lastFilledSlot; ++a) {
         if (eventParticles[a].getIndex() == 6) {
         }
         // fills h_Invariant_mass_opp_sign
@@ -198,27 +200,30 @@ int main() {
       }
     }
 
-    //std::cout << lastFilledSlot << '\n';
+    // std::cout << lastFilledSlot << '\n';
     if (firstEmptySlot != -1) {
       for (int i{100}; i <= lastFilledSlot; ++i) {
         eventParticles[i].setNeutral();
-        //std::cout << eventParticles[i].getIndex() << '\n';
+        // std::cout << eventParticles[i].getIndex() << '\n';
       }
     }
     firstEmptySlot = -1;
   }
 
-  TCanvas *c1 = new TCanvas("c1", "2x2 Canvas", 800, 800);
-  c1->Divide(2, 2);
+  TCanvas *c1 = new TCanvas("c1", "3x3 Canvas", 1200, 800);
+  c1->Divide(3, 3);
   c1->cd(1);
   h_Particle_Type->Draw("APE");
   c1->cd(2);
-  h_Phi_Theta->Draw("APE");
+  h_Phi->Draw("APE");
   c1->cd(3);
-  h_Impulse->Draw("APE");
+  h_Theta->Draw("APE");
   c1->cd(4);
+  h_Impulse->Draw("APE");
+  c1->cd(5);
   h_Trasverse_Impulse->Draw("APE");
-
+  c1->cd(6);
+  h_Energy->Draw("APE");
   c1->Update();
 
   TCanvas *c2 = new TCanvas("c2", "2x2 Canvas", 800, 800);
@@ -233,15 +238,9 @@ int main() {
   h_Invariant_mass_opp_sign_pi_k->Draw("APE");
   c2->Update();
 
-  h_Energy->Draw("APE");
-
-  TCanvas *c3 = new TCanvas("c3", "2x2 Canvas", 800, 800);
-  c3->Divide(1, 1);
-  h_Energy->Draw("APE");
-  c3->cd(1);
-
+  TCanvas *c3 = new TCanvas("c3", "Canvas", 800, 800);
   h_Benchmark->Draw("H");
-  c3->cd(2);
+
   // h_Benchmark->Draw("E,P,SAME");
 
   Particle::ClearParticleTable();
