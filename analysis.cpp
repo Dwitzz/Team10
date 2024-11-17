@@ -27,9 +27,10 @@ void analysis() {
 
   for (int i = 1; i <= 7; i++) {
     std::cout << "Particle Type Bin " << i
-              << " content: " << h_Particle_Type->GetBinContent(i) << '\n'
-              << "With error: " << h_Particle_Type->GetBinError(i) << '\n';
+              << " content: " << h1->GetBinContent(i) << '\n'
+              << "With error: " << h1->GetBinError(i) << '\n';
   }
+
 
   TF1* Uniform_Phi =
       new TF1("Uniform_Phi", "[0]/(2 * TMath::Pi())", 0., 2 * TMath::Pi());
@@ -51,6 +52,17 @@ void analysis() {
 
   TF1* Expo_Impulse = new TF1("Expo_Impulse", "[0] * exp(-[1] * x)", 0., 7.);
   // Expo_Impulse->SetParameters(0, 7E5);
+  h4->Fit("Expo_Impulse", "Q");
+
+  h10->Add(h10, h9, 1, -1);
+  h8->Add(h8, h7, 1, -1);
+
+  TF1* gausHistos = new TF1("gausHistos", "gaus(0)", 0., 2.);
+  gausHistos->SetParameters(0.85, 0.1);
+  
+  h10->Fit("gausHistos", "Q");
+  h8->Fit("gausHistos", "Q");
+
 
   TCanvas* c1 = new TCanvas("c1", "Canvas 1", 800, 800);
   c1->Divide(2, 2);
@@ -59,18 +71,16 @@ void analysis() {
   c1->cd(2);
   h3->Draw("H E");
   c1->cd(3);
-  h4->Draw("APE");
+  h4->Draw("H E");
   c1->cd(4);
-  h4->Draw("APE");
+  h4->Draw("H E");
   c1->Update();
 
-  h10->Add(h9, -1);
-  h8->Add(h8, h7, 1, -1);
-
+  
   TCanvas* c2 = new TCanvas("c2", "Canvas 2", 800, 800);
-  h10->Draw("H");
+  h10->Draw("H E");
   TCanvas* c3 = new TCanvas("c3", "Canvas 3", 800, 800);
-  h8->Draw("H");
+  h8->Draw("H E");
   TCanvas* c4 = new TCanvas("c4", "Canvas 4", 800, 800);
-  h11->Draw("H");
+  h11->Draw("H E");
 }

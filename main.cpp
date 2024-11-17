@@ -166,50 +166,52 @@ int main() {
     for (int k{}; k < lastFilledSlot;
          ++k)  // lastFilledSlot is the last defined particle in the array
     {
-      for (int a{k + 1}; a <= lastFilledSlot; ++a) {
-        if (eventParticles[a].getIndex() == 6) {
-        }
-        // fills h_Invariant_mass_opp_sign
-        else if (eventParticles[a].getCharge() !=
-                 eventParticles[k].getCharge()) {
-          h_Invariant_mass_opp_sign->Fill(
-              eventParticles[k].getInvMass(eventParticles[a]));
+      if (eventParticles[k].getIndex() == 6) {
+        continue;
+      } else {
+        for (int a{k + 1}; a <= lastFilledSlot; ++a) {
+          if (eventParticles[a].getIndex() == 6) {
+          }
+          // fills h_Invariant_mass_opp_sign
+          else if (eventParticles[a].getCharge() !=
+                   eventParticles[k].getCharge()) {
+            h_Invariant_mass_opp_sign->Fill(
+                eventParticles[k].getInvMass(eventParticles[a]));
 
-        }
+          }
+          // fills h_Invariant_mass_same_sign
+          else {
+            h_Invariant_mass_same_sign->Fill(
+                eventParticles[k].getInvMass(eventParticles[a]));
+          }
 
-        // fills h_Invariant_mass_same_sign
-        else if (eventParticles[a].getCharge() ==
-                 eventParticles[k].getCharge()) {
-          h_Invariant_mass_same_sign->Fill(
-              eventParticles[k].getInvMass(eventParticles[a]));
-        }
-
-        if (eventParticles[k].getIndex() == 0 ||
-            eventParticles[k].getIndex() == 1) {
-          if ((eventParticles[a].getIndex() == 2 ||
-               eventParticles[a].getIndex() == 3)) {
-            if (eventParticles[a].getCharge() !=
-                eventParticles[k].getCharge()) {
-              h_Invariant_mass_opp_sign_pi_k->Fill(
-                  eventParticles[k].getInvMass(eventParticles[a]));
-            } else {
-              h_Invariant_mass_same_sign_pi_k->Fill(
-                  eventParticles[k].getInvMass(eventParticles[a]));
+          if (eventParticles[k].getIndex() == 0 ||
+              eventParticles[k].getIndex() == 1) {
+            if ((eventParticles[a].getIndex() == 2 ||
+                 eventParticles[a].getIndex() == 3)) {
+              if (eventParticles[a].getCharge() !=
+                  eventParticles[k].getCharge()) {
+                h_Invariant_mass_opp_sign_pi_k->Fill(
+                    eventParticles[k].getInvMass(eventParticles[a]));
+              } else {
+                h_Invariant_mass_same_sign_pi_k->Fill(
+                    eventParticles[k].getInvMass(eventParticles[a]));
+              }
             }
           }
-        }
 
-        if (eventParticles[k].getIndex() == 2 ||
-            eventParticles[k].getIndex() == 3) {
-          if ((eventParticles[a].getIndex() == 0 ||
-               eventParticles[a].getIndex() == 1)) {
-            if (eventParticles[a].getCharge() !=
-                eventParticles[k].getCharge()) {
-              h_Invariant_mass_opp_sign_pi_k->Fill(
-                  eventParticles[k].getInvMass(eventParticles[a]));
-            } else {
-              h_Invariant_mass_same_sign_pi_k->Fill(
-                  eventParticles[k].getInvMass(eventParticles[a]));
+          if (eventParticles[k].getIndex() == 2 ||
+              eventParticles[k].getIndex() == 3) {
+            if ((eventParticles[a].getIndex() == 0 ||
+                 eventParticles[a].getIndex() == 1)) {
+              if (eventParticles[a].getCharge() !=
+                  eventParticles[k].getCharge()) {
+                h_Invariant_mass_opp_sign_pi_k->Fill(
+                    eventParticles[k].getInvMass(eventParticles[a]));
+              } else {
+                h_Invariant_mass_same_sign_pi_k->Fill(
+                    eventParticles[k].getInvMass(eventParticles[a]));
+              }
             }
           }
         }
@@ -231,14 +233,14 @@ int main() {
   c1->cd(1);
   h_Particle_Type->GetYaxis()->SetTitle("Density Probability");
   h_Particle_Type->Draw("HIST E");
-    h_Particle_Type->GetXaxis()->SetBinLabel(1, "Pi+");
-    h_Particle_Type->GetXaxis()->SetBinLabel(2, "Pi-");
-    h_Particle_Type->GetXaxis()->SetBinLabel(3, "K+");
-    h_Particle_Type->GetXaxis()->SetBinLabel(4, "K-");
-    h_Particle_Type->GetXaxis()->SetBinLabel(5, "P+");
-    h_Particle_Type->GetXaxis()->SetBinLabel(6, "P-");
-    h_Particle_Type->GetXaxis()->SetBinLabel(7, "K*");
-    h_Particle_Type->Scale(1.0/1E7);
+  h_Particle_Type->GetXaxis()->SetBinLabel(1, "Pi+");
+  h_Particle_Type->GetXaxis()->SetBinLabel(2, "Pi-");
+  h_Particle_Type->GetXaxis()->SetBinLabel(3, "K+");
+  h_Particle_Type->GetXaxis()->SetBinLabel(4, "K-");
+  h_Particle_Type->GetXaxis()->SetBinLabel(5, "P+");
+  h_Particle_Type->GetXaxis()->SetBinLabel(6, "P-");
+  h_Particle_Type->GetXaxis()->SetBinLabel(7, "K*");
+  h_Particle_Type->Scale(1.0 / 1E7);
 
   c1->cd(2);
   h_Phi->GetXaxis()->SetTitle("Phi (rad)");
@@ -297,7 +299,7 @@ int main() {
 
   Particle::ClearParticleTable();
 
-  TFile *file = new TFile("histos_progetto.root", "RECREATE" );
+  TFile *file = new TFile("histos_progetto.root", "RECREATE");
   h_Particle_Type->Write();
   h_Phi->Write();
   h_Theta->Write();
@@ -311,6 +313,4 @@ int main() {
   h_Benchmark->Write();
 
   file->Close();
-
-
 }
